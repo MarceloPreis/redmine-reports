@@ -13,8 +13,8 @@ class Redmine {
         $url = 'http://fabtec.ifc-riodosul.edu.br/' . $url . '?key=' . $this->key;
 
         if ($append)
-            $url .= '&' . $append;
-
+        $url .= '&' . $append;
+    
         $ch = curl_init();
     
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -24,13 +24,20 @@ class Redmine {
     
         curl_close($ch);
 
-        return $response;
+        return json_decode($response);
     }
 
     public function issues($append = '') {
-        return $this->api('issues.json', $append);
+        return $this->api('issues.json', $append . '&limit=100')->issues;
+    }
+
+    public function projects($append = '') {
+        return $this->api('projects.json', $append . '&limit=100')->projects;
     } 
 
+    public function project($id) {
+        return $this->api('projects.json', "&id=$id")->projects[0];
+    } 
 }
 
 

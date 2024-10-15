@@ -9,8 +9,8 @@ $app->respond('/dashboard', function ($req, $res, $service) {
     $service->render(__DIR__ . '/views/dashboard.php', $data);
 });
 
-// $app->respond('GET', '/xy', function () {
-//     include __DIR__ . '/views/xy.php';
-// });
+$app->respond('GET', '/', function ($req, $res, $service) {
+    $service->render(__DIR__ . '/views/home.php', []);
+});
 
 $app->dispatch();

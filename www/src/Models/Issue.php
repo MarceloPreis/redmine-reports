@@ -50,7 +50,24 @@ class Issue {
     }
 
     public static function fromSprint(Sprint $sprint) {
-        return (new RedMine())->issues("start_date=%3E%3C$sprint->start|$sprint->end");
+        $response = (new RedMine())->issues("project_id=$sprint->project_id&start_date=%3E%3C$sprint->start|$sprint->end");
+        foreach ($response as $issue) {
+            yield new self((array) $issue);
+        }
+    }
+
+    public function getAuthorName() {
+        if (isset($this->author->name))
+            return $this->author->name;
+
+        return '';
+    }
+
+    public function getResponsibleName() {
+        if (isset($this->assigned_to->name))
+            return $this->assigned_to->name;
+
+        return '';
     }
 }
 
