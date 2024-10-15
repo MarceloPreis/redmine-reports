@@ -11,11 +11,11 @@
 <body>
     <div class="container">
         <div>⬅️ <a href="/">Projetos</a></div>
-        
-        <h2><?= $this->project->name ?></h2>
+        <br />
+        <h2>📇 <?= $this->project->name ?></h2>
         <p><?= $this->project->description ?></p>
         
-        <h2>Dashboard</h2>
+        <h2>📈 Dashboard</h2>
         <form class="search-form" action="dashboard" method="post">
              <select id="sprint" name="sprint" title="sprints" onchange="this.form.submit()">
             <?php
@@ -28,6 +28,13 @@
             <input type="hidden" name="project_id" value="<?= _get('project_id') ?>">
             <input type="submit" value="Buscar">
         </form>
+
+        <?php 
+            if (!$this->sprint->issues) {
+                echo '<div class="alert alert-info" role="alert">Nenhuma tarefa foi encontrada para essa sprint!</div>';
+                return;
+            }
+        ?>
         
         <div class="results">
             <div class="result-item half">
