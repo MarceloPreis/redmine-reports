@@ -51,7 +51,7 @@
         <div class="results">
             <div class="result-item full">
                 <h4>Backlog</h4>
-                <p>Lista de Tarefas da Sprint</p>
+                <p>Lista de Tarefas da Sprint. Total: <?= count($this->sprint->issues) ?></p>
 
                 <table class="table table-bordered">
                 <thead class="thead-light">
@@ -61,7 +61,8 @@
                         <th>Responsável</th>
                         <th>Prioridade</th>
                         <th>Storie Points</th>
-                        <th>Atualizado</th>
+                        <th>Vencimento</th>
+                        <th>Conclusao</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +80,8 @@
                             }
                         }
                         echo "</td>";
-                        echo "<td>{$issue->updated_on}</td>";
+                        echo "<td>{$issue->getDueDate()->format('d/m/Y')}</td>";
+                        echo "<td>{$issue->getClosedOn()->format('d/m/Y')}</td>";
                         echo "</tr>";
                     }
                     ?>
@@ -94,7 +96,7 @@
         let ctx = document.getElementById('burndownChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
-            data: <?= json_encode(generateBurndownData($this->sprint)) ?>,
+            data: <?= json_encode($this->sprint->burndownData()) ?>,
             options: {
                 scales: {
                     x: {
@@ -117,7 +119,7 @@
         ctx = document.getElementById('burnupChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
-            data: <?= json_encode(generateBurnupData($this->sprint)) ?>,
+            data: <?= json_encode($this->sprint->burnupData()) ?>,
             options: {
                 scales: {
                     x: {

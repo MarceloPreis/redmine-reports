@@ -1,5 +1,7 @@
 <?php 
 namespace Opt\RedmineReports\Models;
+
+use DateTime;
 use Opt\RedmineReports\Models\Sprint;
 use Opt\RedmineReports\Services\RedMine;
 
@@ -50,7 +52,7 @@ class Issue {
     }
 
     public static function fromSprint(Sprint $sprint) {
-        $response = (new RedMine())->issues("project_id=$sprint->project_id&start_date=%3E%3C$sprint->start|$sprint->end");
+        $response = (new RedMine())->issues("project_id=$sprint->project_id&due_date=%3E%3C$sprint->start|$sprint->end&sort=closed_on");
         foreach ($response as $issue) {
             yield new self((array) $issue);
         }
@@ -69,6 +71,18 @@ class Issue {
 
         return '';
     }
+
+    public function getClosedOn() {
+        return new DateTime($this->closed_on);
+    }
+
+    public function getDueDate() {
+        return new DateTime($this->due_date);
+    }
+
+    // public function getDueDate() {
+    //     return new DateTime($this->due_date);
+    // }
 }
 
 ?>

@@ -28,7 +28,7 @@ class Redmine {
     }
 
     public function issues($append = '') {
-        return $this->api('issues.json', $append . '&limit=100')->issues;
+        return $this->api('issues.json', $append . '&limit=100&status_id=*')->issues;
     }
 
     public function projects($append = '') {
