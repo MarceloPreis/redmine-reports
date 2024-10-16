@@ -2,7 +2,6 @@
 namespace Opt\RedmineReports\Models;
 
 use Opt\RedmineReports\Services\Redmine;
-
 class Project {
     public $id;
     public $name;
@@ -13,6 +12,7 @@ class Project {
     public $inherit_members;
     public $created_on;
     public $updated_on;
+    public $sprints;
 
     public function __construct($data) {
         $this->id = $data['id'];
@@ -28,5 +28,17 @@ class Project {
 
     public static function id($id) {
         return new self((array) (new RedMine())->project($id));
+    }
+
+
+    public function loadSprints() {
+        $content = file_get_contents('./src/storage/sprints.json');
+        $sprints = json_decode($content, true);
+        // var_dump($sprints);
+        foreach ($sprints as $sprint) {
+            if ($sprint['project_id'] == $this->id) {
+                $this->sprints[] = new Sprint((array) $sprint);
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tabela de Projetos</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../views/css/style.css">
+
 </head>
 <body>
     <div class="container mt-5">
@@ -15,6 +17,8 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Status</th>
+                    <th>Sprints</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,36 +34,16 @@
                         "inherit_members" => false,
                         "created_on" => "2024-03-22T19:23:14Z",
                         "updated_on" => "2024-09-19T22:36:47Z"
-                    ],
-                    [
-                        "id" => 15,
-                        "name" => "Renda Agrícola",
-                        "identifier" => "sitfe",
-                        "description" => "Projeto de Pesquisa - Professor Paulo",
-                        "status" => 1,
-                        "is_public" => true,
-                        "inherit_members" => false,
-                        "created_on" => "2024-10-14T19:35:35Z",
-                        "updated_on" => "2024-10-14T19:35:35Z"
-                    ],
-                    [
-                        "id" => 14,
-                        "name" => "RioAr - Dashboard - PROTALENT",
-                        "identifier" => "sitfd",
-                        "description" => "Desenvolvimento de software proprietário capaz de incorporar os parâmetros necessários para o monitoramento de misturas de concreto. Atualmente, são utilizados dashboard e software gratuito com interface não amigável. A empresa deseja a criação de um novo software, a fim de facilitar o gerenciamento dos processos.",
-                        "status" => 1,
-                        "is_public" => true,
-                        "inherit_members" => false,
-                        "created_on" => "2024-10-09T13:55:55Z",
-                        "updated_on" => "2024-10-14T19:50:24Z"
                     ]
                 ];
 
                 foreach ($projects as $project) {
                     echo "<tr>";
                     echo "<td>{$project['id']}</td>";
-                    echo "<td><a href='dashboard?project_id=" . $project['id'] . "'>{$project['name']}</a></td>";
+                    echo "<td>{$project['name']}</td>";
                     echo "<td>{$project['status']}</td>";
+                    echo "<td></td>";
+                    echo "<td><a href='project/" . $project['id'] . "'>📝</a> <a href='dashboard?project_id=" . $project['id'] . "'>📈</a></td>";
                     echo "</tr>";
                 }
                 ?>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="../views/css/dashboard.css">
+    <link rel="stylesheet" href="../views/css/style.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -19,9 +19,9 @@
         <form class="search-form" action="dashboard" method="post">
              <select id="sprint" name="sprint" title="sprints" onchange="this.form.submit()">
             <?php
-                foreach ($this->sprintOptions as $index => $sprint) {
-                    $description = $sprint['desc'] . ' (' . $sprint['start'] . ' a ' . $sprint['end'] . ')';
-                    echo "<option value='$index' " . ($index == $this->sprint->id ? 'selected' : '')  . ">$description</option>";
+                foreach ($this->project->sprints as $index => $sprint) {
+                    $description = $sprint->desc . ' (' . $sprint->start . ' a ' . $sprint->end . ')';
+                    echo "<option value='$sprint->id' " . ($sprint->id == $this->sprint->id ? 'selected' : '')  . ">$description</option>";
                 }
             ?>
             </select>            

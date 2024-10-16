@@ -7,15 +7,14 @@ use \Opt\RedmineReports\Models\Sprint;
 class DashboardController {
     
     public static function index($request = []) {
-        $opt = (object) ['sprint' => 0, ...$request];
+        $opt = (object) ['sprint' => 1, ...$request];
         $project = Project::id($opt->project_id);
-        $sprint = Sprint::id($opt->sprint);
-        $sprint->project_id = $project->id;
+        $project->loadSprints();
         
-        $sprints = Sprint::SPRINTS;
+        $sprint = Sprint::id($opt->sprint);
         $sprint->loadIssues();
 
-        return ['sprintOptions' => $sprints, 'sprint' => $sprint, 'project' => $project];
+        return ['sprint' => $sprint, 'project' => $project];
     }
 }
 
