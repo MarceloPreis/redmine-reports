@@ -1,7 +1,7 @@
 <?php
 namespace Opt\RedmineReports\Models;
 
-use Opt\RedmineReports\Services\Redmine;
+use Opt\RedmineReports\Services\RedMine;
 class Project {
     public $id;
     public $name;
