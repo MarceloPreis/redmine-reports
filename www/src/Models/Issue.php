@@ -71,7 +71,7 @@ class Issue {
                 continue;
             }
 
-            if (in_array($issue->id, $reserved))
+            if (!$sprint->id && !in_array($issue->id, $reserved))
                 yield new self((array) $issue);
         }
     }

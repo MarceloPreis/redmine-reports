@@ -26,7 +26,7 @@ class SprintController {
         $content = file_get_contents('./src/storage/sprints.json');
         $sprints = json_decode($content, true) ?: [];
         $sprint = new Sprint($request);
-        $sprint->id = count($sprints) + 1;
+        $sprint->id = end($sprints)->id + 1;
 
         array_push($sprints, $sprint);
 
