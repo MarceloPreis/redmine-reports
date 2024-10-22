@@ -13,6 +13,7 @@ class Sprint {
     public  $start;
     public  $end;
     public  $issues;
+    public  $issue_ids;
     public  $project_id;
 
     public function __construct($attributes = []) {
@@ -21,6 +22,12 @@ class Sprint {
         $this->start = $attributes['start'];
         $this->end = $attributes['end'];
         $this->project_id = $attributes['project_id'];
+
+        if (gettype($attributes['issue_ids']) == 'string')
+            $this->issue_ids = explode(',', $attributes['issue_ids']);
+
+        if (gettype($attributes['issue_ids']) == 'array') 
+            $this->issue_ids = $attributes['issue_ids'];
     }
 
     public static function id($id = 0) {
@@ -33,11 +40,31 @@ class Sprint {
             }
         }
     }
+    
+    public function getIssuesId() {
+        switch (gettype($this->issue_ids)) {
+            case 'string':
+                return explode(',', $this->issue_ids);
+                break;
+
+            case 'array':
+                return $this->issue_ids;
+                break;
+            
+            default:
+                return [];
+                break;
+        }
+    }
 
     public function getDuration() {
         $start = new \DateTime($this->start);
         $end = new \DateTime($this->end);
         return $start->diff($end)->format('%a days');
+    }
+
+    public function hasIssue($issueId) {
+        return in_array($issueId, $this->issue_ids );
     }
 
     public function loadIssues() {

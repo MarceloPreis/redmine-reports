@@ -34,7 +34,7 @@ class Project {
     public function loadSprints() {
         $content = file_get_contents('./src/storage/sprints.json');
         $sprints = json_decode($content, true);
-        // var_dump($sprints);
+        
         foreach ($sprints as $sprint) {
             if ($sprint['project_id'] == $this->id) {
                 $this->sprints[] = new Sprint((array) $sprint);

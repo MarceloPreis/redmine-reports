@@ -6,21 +6,28 @@ use \Opt\RedmineReports\Models\Sprint;
 
 class SprintController {
     
-    public static function index($id) {
-        if (!$id) return new Sprint();
+    public static function index($id, $request) {
+        $sprint = $id ? Sprint::id($id) : new Sprint(['project_id' => $request['project_id']]);
 
-        $sprint = Sprint::id($id);
+        $sprint->loadIssues();
         return $sprint;
     }
+
+    public static function listAll() {
+        $content = file_get_contents('./src/storage/sprints.json');
+        $sprints = json_decode($content, true) ?: [];
+        return array_map(fn($attrs) => new Sprint($attrs), $sprints);
+    } 
     
     public static function save($request) {
         if ($request['id'])
             return SprintController::update($request['id'], $request);
-
-        $content = file_get_contents('./src/storage/sprints.json');
-        $sprints = json_decode($content, true);
-        $sprint = new Sprint($request);
         
+        $content = file_get_contents('./src/storage/sprints.json');
+        $sprints = json_decode($content, true) ?: [];
+        $sprint = new Sprint($request);
+        $sprint->id = count($sprints) + 1;
+
         array_push($sprints, $sprint);
 
         file_put_contents('./src/storage/sprints.json', json_encode($sprints));
@@ -30,16 +37,18 @@ class SprintController {
     public static function delete($id) {
         $content = file_get_contents('./src/storage/sprints.json');
         $sprints = json_decode($content, true);
-    
+        
         foreach ($sprints as $key => $sprint) {
             if ($sprint['id'] == $id) {
+                $deleted = $sprints[$key];
+                $deleted['deleted'] = true;
                 unset($sprints[$key]);
-                break;
+
+                file_put_contents('./src/storage/sprints.json', json_encode($sprints));
+                return $deleted;
             }
         }
     
-        file_put_contents('./src/storage/sprints.json', json_encode($sprints));
-        return true;
     }
     
     public static function update($id, $request) {
@@ -49,11 +58,12 @@ class SprintController {
         foreach ($sprints as $key => $sprint) {
             if ($sprint['id'] == $id) {
                 $sprint[$key] = new Sprint($request);
+                file_put_contents('./src/storage/sprints.json', json_encode($sprints));
+                
+                return $sprint[$key];
             }
         }
     
-        file_put_contents('./src/storage/sprints.json', json_encode($sprints));
-        return true;
     }
     
 }

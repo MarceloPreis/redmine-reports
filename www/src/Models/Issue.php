@@ -2,6 +2,7 @@
 namespace Opt\RedmineReports\Models;
 
 use DateTime;
+use Opt\RedmineReports\Controllers\SprintController;
 use Opt\RedmineReports\Models\Sprint;
 use Opt\RedmineReports\Services\RedMine;
 
@@ -52,9 +53,26 @@ class Issue {
     }
 
     public static function fromSprint(Sprint $sprint) {
-        $response = (new RedMine())->issues("project_id=$sprint->project_id&due_date=%3E%3C$sprint->start|$sprint->end&sort=closed_on");
+        $query = "project_id=$sprint->project_id&" . $sprint->id ? "sort=closed_on" : "status_id=open"; 
+        $response = (new RedMine())->issues($query); 
+        $reserved = [];
+        
+        if (!$sprint->id) {
+            foreach (SprintController::listAll() as $createdSprint) {
+                foreach ($createdSprint->getIssuesId() as $issueId) {
+                    $reserved[$issueId] = $issueId;
+                }
+            }
+        }
+
         foreach ($response as $issue) {
-            yield new self((array) $issue);
+            if ($sprint->id && $sprint->hasIssue($issue->id)) {
+                yield new self((array) $issue);
+                continue;
+            }
+
+            if (in_array($issue->id, $reserved))
+                yield new self((array) $issue);
         }
     }
 
@@ -79,10 +97,6 @@ class Issue {
     public function getDueDate() {
         return new DateTime($this->due_date);
     }
-
-    // public function getDueDate() {
-    //     return new DateTime($this->due_date);
-    // }
 }
 
 ?>

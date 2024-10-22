@@ -14,7 +14,7 @@ class Redmine {
 
         if ($append)
         $url .= '&' . $append;
-    
+
         $ch = curl_init();
     
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -28,7 +28,17 @@ class Redmine {
     }
 
     public function issues($append = '') {
-        return $this->api('issues.json', $append . '&limit=100&status_id=*')->issues;
+        $issues = [];
+        $offset = 0;
+        
+        do {
+            $response = $this->api('issues.json', $append . '&limit=100&status_id=*&offset=' . $offset);
+            array_push($issues, ...$response->issues);
+
+            $offset += 100;
+        } while ($this->hasMore($response));
+
+        return $issues;
     }
 
     public function projects($append = '') {
@@ -38,6 +48,10 @@ class Redmine {
     public function project($id) {
         return $this->api('projects.json', "&id=$id")->projects[0];
     } 
+
+    public function hasMore($response) {
+        return $response->total_count > $response->offset;
+    }
 }
 
 
