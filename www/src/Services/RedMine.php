@@ -33,7 +33,7 @@ class Redmine {
         
         do {
             $response = $this->api('issues.json', $append . '&limit=100&status_id=*&offset=' . $offset);
-            array_push($issues, ...$response->issues);
+            array_push($issues, ...(array) $response->issues);
 
             $offset += 100;
         } while ($this->hasMore($response));
