@@ -2,6 +2,7 @@ version: "3.9"
 services:
   webserver:
     container_name: PHP-webserver
+    entrypoint: sh -c "composer install && apache2-foreground"
     build:
       context: .
       dockerfile: Dockerfile
