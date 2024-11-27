@@ -1,5 +1,5 @@
 # redmine-reports
-Tela de para análise de sprints executadas no software RedMine
+Tela de para análise de sprints executadas no software RedMine .
 
 # Como rodar
 - Git clone
